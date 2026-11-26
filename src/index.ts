@@ -1,18 +1,48 @@
-/**
- * Welcome to Cloudflare Workers! This is your first worker.
- *
- * - Run `npm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `npm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
- */
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { logger } from "hono/logger";
+import type { AppEnv } from "./types/env";
+import userRoutes from "./routes/user.routes";
+import { authMiddleware } from "./middleware/auth.middleware";
+const app = new Hono<AppEnv>();
 
-export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		return new Response("Hello World!");
-	},
-} satisfies ExportedHandler<Env>;
+
+// Middleware
+app.use("*", logger());
+app.use("*", cors());
+
+// Home route
+app.get("/", (c) => {
+    return c.json({
+        message: "Cloudflare Backend Running"
+    });
+});
+
+// Register routes
+app.route("/api/users", userRoutes);
+app.use("/api/users", authMiddleware);
+// config routes 
+app.get("/api/config", (c) => {
+    return c.json({
+        name: c.env.APP_NAME,
+        version: c.env.APP_VERSION,
+        environment: c.env.APP_ENV
+    });
+});
+
+// Error handling
+app.notFound((c) => {
+    return c.json({
+        message: "Route not found"
+    }, 404);
+});
+
+app.onError((err, c) => {
+    console.error(err);
+
+    return c.json({
+        message: "Internal server error"
+    }, 500);
+});
+
+export default app;

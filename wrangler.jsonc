@@ -5,11 +5,17 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "sparkling-silence-06e4",
+	"account_id": "6b0d4ba6825631a2cdf7cdcf7a1cc1b3",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-11-23",
 	"observability": {
 		"enabled": true
 	},
+	"vars": {
+    "APP_NAME": "Cloudflare Learning",
+    "APP_VERSION": "1.0.0",
+    "APP_ENV": "development"
+},
 	"upload_source_maps": true
 	/**
 	 * Smart Placement

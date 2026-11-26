@@ -4,6 +4,7 @@ import { logger } from "hono/logger";
 import type { AppEnv } from "./types/env";
 import userRoutes from "./routes/user.routes";
 import { authMiddleware } from "./middleware/auth.middleware";
+import aiRoutes from "./routes/ai.routes";
 const app = new Hono<AppEnv>();
 
 
@@ -29,7 +30,8 @@ app.get("/api/config", (c) => {
         environment: c.env.APP_ENV
     });
 });
-
+app.route("/api/users", userRoutes);
+app.route("/api/ai", aiRoutes);
 // Error handling
 app.notFound((c) => {
     return c.json({

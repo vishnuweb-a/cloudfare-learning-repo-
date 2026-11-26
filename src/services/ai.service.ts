@@ -5,8 +5,20 @@ export async function generateResponse(
     const result = await ai.run(
         "@cf/google/gemma-4-26b-a4b-it",
         {
-            prompt: prompt,
-            max_tokens: 256
+            messages: [
+                {
+                    role: "system",
+                    content: "You are a helpful assistant."
+                },
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
+            max_tokens: 256,
+            chat_template_kwargs: {
+                enable_thinking: false
+            }
         }
     );
 

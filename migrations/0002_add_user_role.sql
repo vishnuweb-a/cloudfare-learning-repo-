@@ -1,0 +1,3 @@
+-- Migration number: 0002 	 2026-11-26T17:11:35.602Z
+ALTER TABLE users
+ADD COLUMN role TEXT NOT NULL DEFAULT 'user';

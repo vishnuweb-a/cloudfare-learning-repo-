@@ -4,5 +4,9 @@ export type AppEnv = {
         APP_VERSION: string;
         APP_ENV: string;
         API_KEY: string;
+        DB:D1Database;
+        
     };
 };
+
+
